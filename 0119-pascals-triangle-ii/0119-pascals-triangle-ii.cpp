@@ -1,7 +1,7 @@
 class Solution {
 public:
-    vector<vector<int>> array = {{1}, {1, 1}};
     vector<int> getRow(int rowIndex) {
+       vector<vector<int>> array = {{1}, {1, 1}};
         if (rowIndex == 0)
             return {1};
         if (rowIndex == 1)
