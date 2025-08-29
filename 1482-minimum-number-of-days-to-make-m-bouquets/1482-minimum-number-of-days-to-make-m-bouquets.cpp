@@ -1,41 +1,47 @@
 class Solution {
 public:
-    int minDays(vector<int>& bloomDay, int m, int k) {
-        vector<int> dups = bloomDay;
-        sort(dups.begin(), dups.end());
-        long long m_dash = m, k_dash = k;
-
-        if (bloomDay.size() < m_dash * k_dash)
-            return -1;
-        long long low = dups[0], done = 0, high = dups[dups.size() - 1], days;
-        while (low <= high && low >= dups[0]) {
-            long long mid = (low + high) / 2;
-            long long i = 0, temp = k, count = 0;
-            while (i < bloomDay.size()) {
-                if (bloomDay[i] - mid <= 0 && temp >= 0) {
-                    temp--;
-                    i++;
-                    if (temp == 0) {
-                        count++;
-                        temp = k;
-                    }
-                    if (count == m) {
-                        days = min(days, mid);
-                        done = 1;
-                        break;
-                    }
-
-                } else {
-                    temp = k;
-                    i++;
-                }
+    bool canMake(vector<int>& bloomDay, int m, int k, int day) {
+        int temp = k;
+        for (const auto time : bloomDay) {
+            if (time <= day) {
+                temp--;
+            } else {
+                temp = k;
             }
-            if (done == 0) {
-                low = mid + 1;
-            } else
-                high = mid - 1;
-            done = 0;
+            if (temp == 0) {
+                m--;
+                temp = k;
+            }
         }
-        return low;
+        if (m <= 0)
+            return true;
+        return false;
+    }
+
+    int minDays(vector<int>& bloomDay, int m, int k) {
+
+        int ans = INT_MIN;
+        for (const auto day : bloomDay) {
+            ans = max(ans, day);
+        }
+        long long m1=m;
+        long long k1=k;
+        int low = 1, high = ans;
+        long long n = bloomDay.size();
+        long long flowers = m1 * k1;
+        if (flowers > n)
+            return -1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (canMake(bloomDay, m, k, mid)) {
+                ans = min(ans, mid);
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return ans;
     }
 };
