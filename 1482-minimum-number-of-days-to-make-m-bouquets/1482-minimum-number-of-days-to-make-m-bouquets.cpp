@@ -20,13 +20,15 @@ public:
 
     int minDays(vector<int>& bloomDay, int m, int k) {
 
-        int ans = INT_MIN;
-        for (const auto day : bloomDay) {
-            ans = max(ans, day);
+        int low = INT_MAX, high = INT_MIN;
+        for (auto day : bloomDay) {
+            high = max(high, day);
+            low = min(low, day);
         }
-        long long m1=m;
-        long long k1=k;
-        int low = 1, high = ans;
+        int ans = high;
+        long long m1 = m;
+        long long k1 = k;
+
         long long n = bloomDay.size();
         long long flowers = m1 * k1;
         if (flowers > n)
