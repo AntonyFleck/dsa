@@ -1,25 +1,19 @@
 class Solution {
 public:
-    int f(int row, int index, vector<vector<int>>& triangle,
-          vector<vector<int>>& dp, int n, int m) {
-
-        if (row == n - 1) {
-            return triangle[n - 1][index];
-        }
-
-        if (dp[row][index] != INT_MAX)
-            return dp[row][index];
-
-        return dp[row][index] = triangle[row][index] +
-                                min(f(row + 1, index, triangle, dp, n, m),
-                                    f(row + 1, index + 1, triangle, dp, n, m));
-    }
-
     int minimumTotal(vector<vector<int>>& triangle) {
         int n = triangle.size();
         int m = triangle[n - 1].size();
-        vector<vector<int>> dp(n, vector<int>(m, INT_MAX));
+        vector<vector<int>> dp(n, vector<int>(m, 0));
 
-        return f(0, 0, triangle, dp, n, m);
+        for (int i = 0; i < m; i++)
+            dp[n - 1][i] = triangle[n - 1][i];
+
+        int temp = m;
+        for (int i = n - 2; i >= 0; i--) {
+            for (int j = 0; j < triangle[i].size(); j++) {
+                dp[i][j] = triangle[i][j] + min(dp[i + 1][j], dp[i + 1][j + 1]);
+            }
+        }
+        return dp[0][0];
     }
 };
